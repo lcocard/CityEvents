@@ -18,6 +18,10 @@ var eventToDate = "2019-10-07T23:59:00.000Z";
 
 var ref = database.ref("calEvent");
 
+
+
+
+
 //var query = database.ref("calEvent").orderByValue("startDate").startAt(eventFromDate).endAt(eventToDate);
 /*database.ref().orderByChild("startDate").on("value", function (snapshot) {
     //.startAt(eventFromDate).endAt(eventToDate)

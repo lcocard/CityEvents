@@ -11,8 +11,7 @@
 
     <!-- Rendering for mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Reset Style CSS -->
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
+
     <!-- Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css?family=Anton|Orbitron&display=swap"
@@ -28,8 +27,6 @@
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
     />
-    <!-- Style CSS -->
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
     <!-- JQuery -->
     <script
       type="text/javascript"
@@ -41,6 +38,13 @@
     <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.3.0/firebase-messaging.js"></script>
+    <!-- Reset Style CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css" />
+    <!-- Style CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <!-- Date picker-->
+
+  
   </head>
 
   <body>
@@ -95,8 +99,10 @@
 
     <!-- ***************************************************************** -->
     <br />
-
     <form>
+      <!-- Date picker-->
+
+      </script>
       <table class="table">
         <thead class="thead-dark">
           <tr>
@@ -154,11 +160,22 @@
           <input type="radio" name="age" value="39" /> 26 - 39<br />
           <input type="radio" name="age" value="59" /> 40 - 59<br />
           <input type="radio" name="age" value="75" /> 60 - 75<br />
-          <input type="radio" name="age" value="75 or over" /> 75 or over<br />
+          <input type="radio" name="age" value="75 or over" /> 75 or over<br>
+          <br>
+          <p> Please select your preferred date below</p>
+          <form action="/action_page.php">
+ Date: <input id="datePicker" type="date" name="bday">
+           <!-- Button triggers search in the city events open data -->
+          <input
+            type="submit"
+            class="btn btn-success btn-topics-input"
+            value="Submit"
+          />
           <br />
         </form>
         <br />
       </div>
+
       <!--<div class="form-group">
         <label for="InputFirstTrain"
           >First Train Time (HH:mm - military time)</label
@@ -171,20 +188,7 @@
         />
       </div>
     -->
-      <!--<script>
-        $(function() {
-          $("#date_ex").datepicker();
-        });
-      </script>-->
 
-      <div>
-        Prefered Date: <input type="text" id="date_ex" />
-        <br />
-        <br />
-        <button type="submit" class="btn btn-primary submitTrain">
-          Search for Events
-        </button>
-      </div>
       <br />
 
       <div class="table-responsive">
@@ -230,6 +234,8 @@
       async
       defer
     ></script>
+
     <script src="assets/javascript/app.js"></script>
+
   </body>
 </html>
