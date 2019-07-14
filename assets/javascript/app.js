@@ -71,6 +71,7 @@ var map;
 var service;
 var infowindow;
 
+
 function initMap() {
     var torontoEvent = new google.maps.LatLng(43.7463319, -79.58131309999999);
 
