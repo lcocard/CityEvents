@@ -163,16 +163,9 @@
           <input type="radio" name="age" value="75 or over" /> 75 or over<br>
           <br>
           <p> Please select your preferred date below</p>
-          <form action="/action_page.php">
- Date: <input id="datePicker" type="date" name="bday">
-           <!-- Button triggers search in the city events open data -->
-          <input
-            type="submit"
-            class="btn btn-success btn-topics-input"
-            value="Submit"
-          />
-          <br />
-        </form>
+<input type="date" name="bday" id="datePicker">
+<input type="button" value="date" id="datebtn">
+
         <br />
       </div>
 
@@ -188,6 +181,8 @@
         />
       </div>
     -->
+
+   
 
       <br />
 
@@ -209,22 +204,31 @@
               <th scope="col">Event Name</th>
               <th scope="col">Event Date</th>
               <th scope="col">Event Description</th>
-              <th scope="col">
-                <!--           <button id="map_button" type="button">
-                  Click for here for Event location
-                </button>-->
-              </th>
+              <th scope="col">Map Location</th>
             </tr>
           </thead>
-          <!--<tbody>
+          <tbody>
         <tr>
-          <th scope="row">Trenton Express</th>
-          <td>Trenton</td>
-          <td>25</td>
-          <td>05:35 PM</td>
-          <td>10</td>
+          <th scope="row">Union Summer</th>
+          <td class="getDate"></td>
+          <td>The contemporary musical Boys Don&#8217;t Cry follows Jayden Stone, a popular high school soccer star in his senior year, struggling to live up to the expectations of his peers, his family and his late Father. When he falls in love with the new girl at school &#8211; a badass feminist with a passion for poetry and social justice &#8211; she encourages him to get in touch with his artistic side, and he is forced to re-evaluate what it means to be a man. &#10;&#10;In this semi-autobiographical musical coming-of-age story (fresh off a workshop at the Red Sandcastle Theatre last summer), award-winning young songwriter Mateo Lewis explores his complicated relationship with gender which reminds us that we can be better than the men who came before us.</td>
+          <td>          <input
+            type="submit"
+            class="btn btn-success btn-topics-input"
+            value="Submit"
+          /></td>
         </tr>
-      </tbody>-->
+                <tr>
+          <th scope="row">Union Summer</th>
+          <td class="getDate"></td>
+          <td>The contemporary musical Boys Don&#8217;t Cry follows Jayden Stone, a popular high school soccer star in his senior year, struggling to live up to the expectations of his peers, his family and his late Father. When he falls in love with the new girl at school &#8211; a badass feminist with a passion for poetry and social justice &#8211; she encourages him to get in touch with his artistic side, and he is forced to re-evaluate what it means to be a man. &#10;&#10;In this semi-autobiographical musical coming-of-age story (fresh off a workshop at the Red Sandcastle Theatre last summer), award-winning young songwriter Mateo Lewis explores his complicated relationship with gender which reminds us that we can be better than the men who came before us.</td>
+          <td>          <input
+            type="submit"
+            class="btn btn-success btn-topics-input"
+            value="Submit"
+          /></td>
+        </tr>
+      </tbody>
         </table>
       </div>
     </form>

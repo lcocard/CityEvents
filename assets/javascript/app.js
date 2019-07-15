@@ -1,3 +1,5 @@
+
+
 // 1. Initialize Firebase
 var config = {
     apiKey: "AIzaSyAWutX-VXDOCMn5DULQaMMZpExXF-HU2LQ",
@@ -13,64 +15,52 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var eventFromDate = "2019-07-15T00:00:00.000Z";
-var eventNextDay = moment(eventFromDate).add(1, 'days');
-//var eventToDate = "2019-10-07T23:59:00.000Z";
-console.log("eventFromDate = " + eventFromDate);
-console.log("eventNextDay = " + eventNextDay.format());
+$(document).ready(function () {
+    let now = new Date();
 
-var ref = database.ref("calEvent");
+    let day = ("0" + now.getDate()).slice(-2);
+    let month = ("0" + (now.getMonth() + 1)).slice(-2);
 
-
+    let today = (day) + "-" + (month) + "-" + now.getFullYear();
 
 
+    $('#datePicker').val(today);
 
-//var query = database.ref("calEvent").orderByValue("startDate").startAt(eventFromDate).endAt(eventToDate);
-/*database.ref().orderByChild("startDate").on("value", function (snapshot) {
-    //.startAt(eventFromDate).endAt(eventToDate)
-    console.log(snapshot.val());
-});*/
+    $('#datebtn').click(function () {
 
-/*database.ref.child(`calEvent"/startDateTime`).orderByValue().once('value', (snapshot) => {
-    if (snapshot.exists()) {
-        snapshot.forEach((child) => {
-            console.log(`${child.key}: ${child.val()}`)
-        })
-    }
-})*/
-var eventArray = [];
+        testClicked();
 
-database.ref().on("child_added", function (childSnapshot) {
-    //console.log(childSnapshot.val());
-    for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
-        if ((eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime) && (childSnapshot.val().calEvent.dates[i].startDateTime <= eventNextDay.format())) {
-            //console.log(childSnapshot.val().calEvent.dates)
-            console.log(" startDateTime = " + childSnapshot.val().calEvent.dates[i].startDateTime + " EndDateTime = " + childSnapshot.val().calEvent.dates[i].endDateTime + " Description = " + childSnapshot.val().calEvent.description + " EventName = " + childSnapshot.val().calEvent.eventName);
-        }
-    }
+    });
 });
+function testClicked() {
+    $('.getDate').html($('#datePicker').val());
+    //var eventDatePicker = "2019-07-03";
+    //var eventDatePicker = $('.getDate').val();
+    var eventDatePicker = document.querySelector('#datePicker').value;
+    console.log("eventDatePicker = " + eventDatePicker);
+    var eventDatePickerFORM = "YYYY-MM-DD";
+    var convertedEventDatePicker = moment(eventDatePicker, eventDatePickerFORM);
+    console.log("convertedEventDatePicker = " + convertedEventDatePicker.format());
+    var eventFromDate = convertedEventDatePicker.format();
+    var eventNextDay = moment(eventFromDate).add(1, 'days');
+
+    console.log("eventFromDate = " + eventFromDate);
+    console.log("eventNextDay = " + eventNextDay.format());
 
 
+    var ref = database.ref("calEvent");
 
-var randomDate = "02/23/1999";
-var randomFormat = "MM/DD/YYYY";
-var convertedDate = moment("convertedDate = " + randomDate, randomFormat);
+    var eventArray = [];
 
-// Using scripts from moment.js write code below to complete each of the following.
-// Console.log to confirm the code changes you made worked.
-
-// 1 ...to convert the randomDate into three other date formats
-console.log(convertedDate.format());
-
-
-
-/*database.ref().on("child_added", function (childSnapshot) {
-    //console.log(childSnapshot.val());
-    for (x in childSnapshot.val().calEvent.description) {
-        console.log(childSnapshot.val().calEvent.description)
-    }
-});*/
-
+    database.ref().on("child_added", function (childSnapshot) {
+        for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
+            if ((eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime) && (childSnapshot.val().calEvent.dates[i].startDateTime <= eventNextDay.format())) {
+                //console.log(childSnapshot.val().calEvent.dates)
+                console.log(" startDateTime = " + childSnapshot.val().calEvent.dates[i].startDateTime + " EndDateTime = " + childSnapshot.val().calEvent.dates[i].endDateTime + " Description = " + childSnapshot.val().calEvent.description + " EventName = " + childSnapshot.val().calEvent.eventName);
+            }
+        }
+    });
+}
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
@@ -78,10 +68,10 @@ console.log(convertedDate.format());
 var map;
 var service;
 var infowindow;
-
+listLN = "Nathan Phillips Square";
 
 function initMap() {
-    var torontoEvent = new google.maps.LatLng(43.7463319, -79.58131309999999);
+    var torontoEvent = new google.maps.LatLng(43.7184034, -79.5184845);
 
     infowindow = new google.maps.InfoWindow();
 
@@ -89,8 +79,8 @@ function initMap() {
         document.getElementById('map'), { center: torontoEvent, zoom: 15 });
 
     var request = {
-        query: "Rexdale Community Hub",
-        fields: ['name', 'formatted_address', 'geometry'],
+        query: listLN,
+        fields: ['name', 'formatted_address', 'geometry']
     };
 
     service = new google.maps.places.PlacesService(map);
@@ -117,6 +107,31 @@ function createMarker(place) {
         infowindow.open(map, this);
     });
 }
+//************************************************** Tests ********************************************************* */
+//var eventDatePicker = "2019-01-15";
+//var eventDatePickerFORM = "";
+//var convertedEventDatePicker = "";
+
+//var randomDate = "02/23/1999";
+//var randomFormat = "MM/DD/YYYY";
+//var convertedDate = moment("convertedDate = " + randomDate, randomFormat);
+
+//var eventDateTMST = "2019-07-15T00:00:00.000Z";
+//var eventDateFORM = "";
+//var eventDate = moment(eventDateTMST, eventDateFORM);
+
+//var eventDatePicker = "2019-07-03";
+//var eventDatePickerFORM = "YYYY-MM-DD";
+//var convertedEventDatePicker = moment("convertedEventDatePicker = " + eventDatePicker, eventDatePickerFORM);
+
+
+// Using scripts from moment.js write code below to complete each of the following.
+// Console.log to confirm the code changes you made worked.
+
+// 1 ...to convert the randomDate into three other date formats
+//console.log(convertedDate.format());
+//console.log(eventDate.format("MMM Do Y"));
+
 
 
 
