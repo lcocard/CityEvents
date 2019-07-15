@@ -13,8 +13,11 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var eventFromDate = "2019-10-07T00:00:00.000Z";
-var eventToDate = "2019-10-07T23:59:00.000Z";
+var eventFromDate = "2019-07-15T00:00:00.000Z";
+var eventNextDay = moment(eventFromDate).add(1, 'days');
+//var eventToDate = "2019-10-07T23:59:00.000Z";
+console.log("eventFromDate = " + eventFromDate);
+console.log("eventNextDay = " + eventNextDay.format());
 
 var ref = database.ref("calEvent");
 
@@ -39,10 +42,11 @@ var eventArray = [];
 
 database.ref().on("child_added", function (childSnapshot) {
     //console.log(childSnapshot.val());
-    for (i in childSnapshot.val().calEvent.dates) {
-        if ((eventFromDate <= childSnapshot.val().calEvent.dates[0].startDateTime) && (childSnapshot.val().calEvent.dates[0].startDateTime <= eventToDate));
-        //console.log(childSnapshot.val().calEvent.dates)
-        console.log(" startDateTime = " + childSnapshot.val().calEvent.dates[0].startDateTime + " EndDateTime = " + childSnapshot.val().calEvent.dates[0].endDateTime + " Description = " + childSnapshot.val().calEvent.description + " EventName = " + childSnapshot.val().calEvent.eventName);
+    for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
+        if ((eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime) && (childSnapshot.val().calEvent.dates[i].startDateTime <= eventNextDay.format())) {
+            //console.log(childSnapshot.val().calEvent.dates)
+            console.log(" startDateTime = " + childSnapshot.val().calEvent.dates[i].startDateTime + " EndDateTime = " + childSnapshot.val().calEvent.dates[i].endDateTime + " Description = " + childSnapshot.val().calEvent.description + " EventName = " + childSnapshot.val().calEvent.eventName);
+        }
     }
 });
 
@@ -50,7 +54,7 @@ database.ref().on("child_added", function (childSnapshot) {
 
 var randomDate = "02/23/1999";
 var randomFormat = "MM/DD/YYYY";
-var convertedDate = moment(randomDate, randomFormat);
+var convertedDate = moment("convertedDate = " + randomDate, randomFormat);
 
 // Using scripts from moment.js write code below to complete each of the following.
 // Console.log to confirm the code changes you made worked.
