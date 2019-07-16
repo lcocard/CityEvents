@@ -22,7 +22,9 @@ var config = {
 var map;
 var service;
 var infowindow;
-listLN = childSnapshot.val().calEvent.locations[0].locationName;
+var listLN = "Textile Museum of Canada";
+
+//listLN = childSnapshot.val().calEvent.locations[0].locationName;
 //var listLN = localStorage.getItem("listLN");
 console.log("locationName (listLN) = " + listLN);
 

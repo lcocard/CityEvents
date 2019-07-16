@@ -113,13 +113,13 @@ function testClicked() {
         $getDescription.html(childSnapshot.val().calEvent.description);
         $getRow.append($getDescription);
 
-        var $getMapButton =  $(" <td class='getMapButton'> <input type='submit' class='btn btn-success btn-topics-input' value='Submit'/></td>");
+        var $getMapButton =  $(" <td class='getMapButton'> <input type='submit' class='btn btn-success btn-topics-input' value='View Location'/></td>");
         $getRow.append($getMapButton);
 
         $(".btn-topics-input").on("click", function() {
           console.log("locationName (button listLN) = " + listLN);
           listLN = childSnapshot.val().calEvent.locations[0].locationName;
-          //window.open("maps.html", "_blank")
+          window.open("maps.html", "_blank")
           });
 
         $("#eventsDataArea").append($getRow);
