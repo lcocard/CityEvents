@@ -95,7 +95,7 @@ function testClicked() {
         var $getEventName = $("<th>");
         $getEventName.addClass("getEventName");
         $getEventName.attr("scope", "row");
-        $(".getEventName").html(childSnapshot.val().calEvent.eventName);
+        $getEventName.html(childSnapshot.val().calEvent.eventName);
         $getRow.append($getEventName);
 
         var randomDate = childSnapshot.val().calEvent.dates[i].startDateTime;
@@ -105,12 +105,12 @@ function testClicked() {
         
         var $getDate =  $("<td>");
         $getDate.addClass("getDate");
-        $(".getDate").html(convertedDate.format("MMM Do YY"));
+        $getDate.html(convertedDate.format("MMM Do YY"));
         $getRow.append($getDate);
 
         var $getDescription =  $("<td>");
         $getDescription.addClass("getDescription");
-        $(".getDescription").html(childSnapshot.val().calEvent.description);
+        $getDescription.html(childSnapshot.val().calEvent.description);
         $getRow.append($getDescription);
 
         var $getMapButton =  $(" <td class='getMapButton'> <input type='submit' class='btn btn-success btn-topics-input' value='Submit'/></td>");
