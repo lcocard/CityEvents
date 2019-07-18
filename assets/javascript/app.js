@@ -12,13 +12,7 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
-var $listLN="Nathan Phillips Square";
-
-function initialize() {
-  initMap();
-  initAutoComplete();
-}
-
+$listLN = "Nathan Phillips Square";
 
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
@@ -28,13 +22,13 @@ var map;
 var service;
 var infowindow;
 var marker;
-placeLat=0;
-placeLng=0;
+var markers = [];
+placeLat = 0;
+placeLng = 0;
 //var listLN = "Nathan Phillips Square";
 //placeLat=43.7184034
 //placeLng=-79.5184845
 //listLN = localStorage.getItem("listLN");
-
 
 function initMap() {
   var torontoEvent = new google.maps.LatLng(placeLat, placeLng);
@@ -52,19 +46,9 @@ function initMap() {
     fields: ["name", "formatted_address", "geometry"]
   };
 
-  var placeSearch, autocomplete;
-var componentForm = {
-  street_number: 'short_name',
-  route: 'long_name',
-  locality: 'long_name',
-  administrative_area_level_1: 'short_name',
-  country: 'long_name',
-  postal_code: 'short_name'
-};
-
   service = new google.maps.places.PlacesService(map);
 
-  service.findPlaceFromQuery(request, function(results, status) {
+  service.findPlaceFromQuery(request, function (results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         createMarker(results[i]);
@@ -81,13 +65,28 @@ function createMarker(place) {
     position: place.geometry.location
   });
 
-  google.maps.event.addListener(marker, "click", function() {
+  google.maps.event.addListener(marker, "click", function () {
     infowindow.setContent(place.name + " - " + place.formatted_address);
     infowindow.open(map, this);
   });
+
 }
 
-$(document).ready(function() {
+function addMarker(location) {
+  var marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });
+  markers.push(marker);
+}
+
+function setMapOnAll(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
+
+$(document).ready(function () {
   let now = new Date();
 
   let day = ("0" + now.getDate()).slice(-2);
@@ -97,173 +96,194 @@ $(document).ready(function() {
 
   $("#datePicker").val(today);
 
-  $("#datebtn").click(function() {
+  $("#datebtn").click(function () {
     testClicked();
   });
 
-function testClicked() {
-  $(".getDate").html($("#datePicker").val());
-  var eventDatePicker = document.querySelector("#datePicker").value;
-  console.log("eventDatePicker = " + eventDatePicker);
-  var eventDatePickerFORM = "YYYY-MM-DD";
-  var convertedEventDatePicker = moment(eventDatePicker, eventDatePickerFORM);
-  console.log(
-    "convertedEventDatePicker = " + convertedEventDatePicker.format()
-  );
-  var eventFromDate = convertedEventDatePicker.format();
-  var eventNextDay = moment(eventFromDate).add(1, "days");
+  function testClicked() {
+    $(".getDate").html($("#datePicker").val());
+    var eventDatePicker = document.querySelector("#datePicker").value;
+    console.log("eventDatePicker = " + eventDatePicker);
+    var eventDatePickerFORM = "YYYY-MM-DD";
+    var convertedEventDatePicker = moment(eventDatePicker, eventDatePickerFORM);
+    console.log(
+      "convertedEventDatePicker = " + convertedEventDatePicker.format()
+    );
+    var eventFromDate = convertedEventDatePicker.format();
+    var eventNextDay = moment(eventFromDate).add(1, "days");
 
-  console.log("eventFromDate = " + eventFromDate);
-  console.log("eventNextDay = " + eventNextDay.format());
+    console.log("eventFromDate = " + eventFromDate);
+    console.log("eventNextDay = " + eventNextDay.format());
 
-  var ref = database.ref("calEvent");
+    var ref = database.ref("calEvent");
 
-  var locationArray;
-
-  database.ref().on("child_added", function(childSnapshot) {
-    for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
-      if (
-        eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime &&
-        childSnapshot.val().calEvent.dates[i].startDateTime <=
+    database.ref().on("child_added", function (childSnapshot) {
+      for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
+        if (
+          eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime &&
+          childSnapshot.val().calEvent.dates[i].startDateTime <=
           eventNextDay.format()
-      ) {
-        //console.log(childSnapshot.val().calEvent.dates)
-        console.log(
-          " startDateTime = " +
+        ) {
+          //console.log(childSnapshot.val().calEvent.dates)
+          console.log(
+            " startDateTime = " +
             childSnapshot.val().calEvent.dates[i].startDateTime +
             " EndDateTime = " +
             childSnapshot.val().calEvent.dates[i].endDateTime +
             " Description = " +
             childSnapshot.val().calEvent.description +
-            " Location = " + childSnapshot.val().calEvent.locations[0].locationName + 
+            " Location = " + childSnapshot.val().calEvent.locations[0].locationName +
             " EventName = " +
             childSnapshot.val().calEvent.eventName
-        );
+          );
 
-        /* ********************* Create table columns ************************** */
+          /* ********************* Create table columns ************************** */
 
-        var $getRow = $("<tr>");
-        $getRow.addClass("getRow");
-        
-
-        var $getEventName = $("<th>");
-        $getEventName.addClass("getEventName");
-        $getEventName.attr("scope", "row");
-        $getEventName.html(childSnapshot.val().calEvent.eventName);
-        $getRow.append($getEventName);
-
-        var $getEventLocation = $("<th>");
-        $getEventLocation.addClass("getEventLocation");
-        $getEventLocation.html(childSnapshot.val().calEvent.locations[0].locationName);
-        $getRow.append($getEventLocation);
-
-        var randomDate = childSnapshot.val().calEvent.dates[i].startDateTime;
-        var randomFormat = "";
-        var convertedDate = moment(randomDate, randomFormat);
-        
-        
-        var $getDate =  $("<td>");
-        $getDate.addClass("getDate");
-        $getDate.html(convertedDate.format("MMM Do YY"));
-        $getRow.append($getDate);
-
-        var $getDescription =  $("<td>");
-        $getDescription.addClass("getDescription");
-        $getDescription.html(childSnapshot.val().calEvent.description);
-        $getRow.append($getDescription);
-
-        /* ********************* Create View Location Buttons ************************** */
-
-       $listLN=childSnapshot.val().calEvent.locations[0].locationName;
-       console.log("locationName (buttons creation $listLN) = " + $listLN);
-       var placeLat=childSnapshot.val().calEvent.locations[0].coords.lat;
-       var placeLng=childSnapshot.val().calEvent.locations[0].coords.lng;
-       console.log("placeLat - placeLng (button creation)=  " + placeLat + "  -  " + placeLng);
-
-       var $getMapButton = $("<td>");
-       $getMapButton.addClass("getMapButton");
-       var $mapButton = $("<button>");
-       $mapButton.attr("type", "button");
-       $mapButton.addClass("viewLocation");
-       $mapButton.addClass("btn btn-success");
-       $mapButton.attr("id", "topics_button_row" + i);
-       $mapButton.attr("value", $listLN);
-       $mapButton.html("<p>View Location</p>");
-       $getMapButton.append($mapButton);
-       $getRow.append($getMapButton);
-
-       $("#eventsDataArea").append($getRow);
-
-      /* ************************** Display the map ************************** */
-
-      $(document).on("click", ".viewLocation", function() {
-        var $listLN=$(this).val();
+          var $getRow = $("<tr>");
+          $getRow.addClass("getRow");
 
 
-        console.log("locationName (map request 2 $listLN) = " + $listLN);
-        //console.log("placeLat - placeLng (map request 2)=  " + placeLat + "  -  " + placeLng);
-        //console.log("placeLat - placeLng (map request 3)=  " + place.geometry.location.lat()+ "  -  " + place.geometry.location.lng();
+          var $getEventName = $("<th>");
+          $getEventName.addClass("getEventName");
+          $getEventName.attr("scope", "row");
+          $getEventName.html(childSnapshot.val().calEvent.eventName);
+          $getRow.append($getEventName);
 
-        initMap();
+          var $getEventLocation = $("<th>");
+          $getEventLocation.addClass("getEventLocation");
+          $getEventLocation.html(childSnapshot.val().calEvent.locations[0].locationName);
+          $getRow.append($getEventLocation);
 
-        function createMarker(place) {
-          var marker = new google.maps.Marker({
-            map: map,
-            position: place.geometry.location
-          });
-        google.maps.event.addListener(marker, "click", function() {
-          infowindow.setContent(place.name + " - " + place.formatted_address);
-          infowindow.open(map, this);
-        });
-      }
+          var randomDate = childSnapshot.val().calEvent.dates[i].startDateTime;
+          var randomFormat = "";
+          var convertedDate = moment(randomDate, randomFormat);
 
-        
-      /* function initMap() {
-          var torontoEvent = new google.maps.LatLng(place.Lat, place.Lng);
-        
-          infowindow = new google.maps.InfoWindow();
-        
-          map = new google.maps.Map(document.getElementById("map"), {
-            center: torontoEvent,
-            zoom: 15
-          });
-        
-          console.log("locationName (map request 3 $listLN) = " + $listLN);
-          var request = {
-            query: $listLN,
-            fields: ["name", "formatted_address", "geometry"]
-          };
-        
-          service = new google.maps.places.PlacesService(map);
-        
-          service.findPlaceFromQuery(request, function(results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK) {
-              for (var i = 0; i < results.length; i++) {
-                createMarker(results[i]);
-              }
-        
-              map.setCenter(results[0].geometry.location);
+
+          var $getDate = $("<td>");
+          $getDate.addClass("getDate");
+          $getDate.html(convertedDate.format("MMM Do YY"));
+          $getRow.append($getDate);
+
+          var $getDescription = $("<td>");
+          $getDescription.addClass("getDescription");
+          $getDescription.html(childSnapshot.val().calEvent.description);
+          $getRow.append($getDescription);
+
+          /* ********************* Create View Location Buttons ************************** */
+
+          $listLN = childSnapshot.val().calEvent.locations[0].locationName;
+          console.log("locationName (buttons creation $listLN) = " + $listLN);
+          var placeLat = childSnapshot.val().calEvent.locations[0].coords.lat;
+          var placeLng = childSnapshot.val().calEvent.locations[0].coords.lng;
+          console.log("placeLat - placeLng (button creation)=  " + placeLat + "  -  " + placeLng);
+
+          var $getMapButton = $("<td>");
+          $getMapButton.addClass("getMapButton");
+          var $mapButton = $("<button>");
+          $mapButton.attr("type", "button");
+          $mapButton.addClass("viewLocation");
+          $mapButton.addClass("btn btn-success");
+          $mapButton.attr("id", "topics_button_row" + i);
+          $mapButton.attr("value", $listLN);
+          $mapButton.html("<p>View Location</p>");
+          $getMapButton.append($mapButton);
+          $getRow.append($getMapButton);
+
+          $("#eventsDataArea").append($getRow);
+
+          /* ************************** The User Clicks a Button to Display the Event Map ************************** */
+
+          $(document).on("click", ".viewLocation", function () {
+            $listLN = $(this).val();
+
+            var placeLat = childSnapshot.val().calEvent.locations[0].coords.lat;
+            var placeLng = childSnapshot.val().calEvent.locations[0].coords.lng;
+
+            console.log("locationName (map request 2 $listLN) = " + $listLN);
+            //console.log("placeLat - placeLng (map request 2)=  " + placeLat + "  -  " + placeLng);
+            //console.log("placeLat - placeLng (map request 3)=  " + place.geometry.location.lat()+ "  -  " + place.geometry.location.lng();
+
+            function showMarkers() {
+              setMapOnAll(map);
             }
+
+            initMap();
+
+            var markers = [];
+            function createMarker(place) {
+              var marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location
+              });
+              markers.push(marker);
+              google.maps.event.addListener(marker, "click", function () {
+                infowindow.setContent(place.name + " - " + place.formatted_address);
+                infowindow.open(map, this);
+              });
+            }
+
+
+            function addMarker(location) {
+              var marker = new google.maps.Marker({
+                position: location,
+                map: map
+              });
+              markers.push(marker);
+            }
+
+            function setMapOnAll(map) {
+              for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+              }
+            }
+
+            /*function initMap() {
+               var torontoEvent = new google.maps.LatLng(place.Lat, place.Lng);
+             
+               infowindow = new google.maps.InfoWindow();
+             
+               map = new google.maps.Map(document.getElementById("map"), {
+                 center: torontoEvent,
+                 zoom: 15
+               });
+             
+               console.log("locationName (map request 3 $listLN) = " + $listLN);
+               var request = {
+                 query: $listLN,
+                 fields: ["name", "formatted_address", "geometry"]
+               };
+             
+               service = new google.maps.places.PlacesService(map);
+             
+               service.findPlaceFromQuery(request, function(results, status) {
+                 if (status === google.maps.places.PlacesServiceStatus.OK) {
+                   for (var i = 0; i < results.length; i++) {
+                     createMarker(results[i]);
+                   }
+             
+                   map.setCenter(results[0].geometry.location);
+                 }
+               });
+             } 
+             function createMarker(place) {
+               var marker = new google.maps.Marker({
+                 map: map,
+                 title: place.name,
+                 position: place.geometry.location
+               });
+             
+               google.maps.event.addListener(marker, "click", function() {
+                 infowindow.setContent(place.name + " - " + place.formatted_address);
+                 infowindow.open(map, this);
+               });
+             }*/
           });
-        } 
-        function createMarker(place) {
-          var marker = new google.maps.Marker({
-            map: map,
-            title: place.name,
-            position: place.geometry.location
-          });
-        
-          google.maps.event.addListener(marker, "click", function() {
-            infowindow.setContent(place.name + " - " + place.formatted_address);
-            infowindow.open(map, this);
-          });
-        }*/
-      });
-      
+
+        }
       }
-    }
-  });
-}
+    });
+  }
+
 });
 
 
@@ -287,7 +307,7 @@ function testClicked() {
 /* Test 2: Add each element to the table */
 /*let y = 0
                     $("#eventsDataArea").empty();
-    
+
                     //var database = firebase.database();
                     //database.ref().once('value', function (snapshot) {
                     //if (snapshot.exists()) {
@@ -345,7 +365,7 @@ function testClicked() {
 
         //<button id="myBtn" name="myname" value=childSnapshot.val().calEvent.locations[0].locationName onclick="listLN=(this.value)">View Location</button>
        // var $getMapButton =  $(" <td class='getMapButton'> <input type='submit' $listLN=" + childSnapshot.val().calEvent.locations[0].locationName + " class='btn btn-success btn-topics-input' value='View Location'/></td>");
-        
+
          //eventArray.push(childSnapshot.val().calEvent.eventName);
 
            //var eventDatePicker = "2019-07-03";
@@ -362,5 +382,5 @@ function testClicked() {
   //$(".btn-topics-input").on("click", function() {
   // Store
  //
-  
+
 //  window.open("maps.html", "_blank");
