@@ -101,6 +101,7 @@ $(document).ready(function () {
   });
 
   function testClicked() {
+    $("#eventsDataArea").empty();
     $(".getDate").html($("#datePicker").val());
     var eventDatePicker = document.querySelector("#datePicker").value;
     console.log("eventDatePicker = " + eventDatePicker);
