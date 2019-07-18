@@ -13,7 +13,7 @@ var config = {
   firebase.initializeApp(config);
   
   var database = firebase.database();
-  
+
 
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
@@ -22,13 +22,14 @@ var config = {
 var map;
 var service;
 var infowindow;
-var listLN = "Textile Museum of Canada";
+var $listLN;
+//var listLN = "Textile Museum of Canada";
 
 //listLN = childSnapshot.val().calEvent.locations[0].locationName;
 //var listLN = localStorage.getItem("listLN");
-console.log("locationName (listLN) = " + listLN);
+//console.log("locationName (listLN) = " + listLN);
 
-//listLN = "Nathan Phillips Square";
+listLN = "Nathan Phillips Square";
 
 function initMap() {
   var torontoEvent = new google.maps.LatLng(43.7184034, -79.5184845);
@@ -41,7 +42,7 @@ function initMap() {
   });
 
   var request = {
-    query: listLN,
+    query: $listLN,
     fields: ["name", "formatted_address", "geometry"]
   };
 
