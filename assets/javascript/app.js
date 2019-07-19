@@ -25,6 +25,7 @@ var marker;
 var markers = [];
 placeLat = 0;
 placeLng = 0;
+j = 0;
 //var listLN = "Nathan Phillips Square";
 //placeLat=43.7184034
 //placeLng=-79.5184845
@@ -185,9 +186,27 @@ $(document).ready(function () {
           $getDate2.html(convertedDate2.format("YYYY-MM-DDTHH:mm:ss"));
           $getRow.append($getDate2);
 
+          j++
+
+          var $collapseEventDescriptionItem = $("<a>");
+          $collapseEventDescriptionItem.attr("role", "button");
+          $collapseEventDescriptionItem.addClass("collapsed");
+          $collapseEventDescriptionItem.attr("data-toggle", "collapse");
+          $collapseEventDescriptionItem.attr("href", "#collapseEventDescription" + j);
+          $collapseEventDescriptionItem.attr("aria-expanded", "false");
+          $collapseEventDescriptionItem.attr("aria-controls", "collapseEventDescription" + j);
+
+          var $eventDescription = childSnapshot.val().calEvent.description;
+          var $eventDescriptionItem = $("<p>");
+          $eventDescriptionItem.addClass("collapse");
+          $eventDescriptionItem.attr("id", "collapseEventDescription" + j);
+          $eventDescriptionItem.attr("aria-expanded", "false");
+          $eventDescriptionItem.html($eventDescription);
+
           var $getDescription = $("<td>");
           $getDescription.addClass("getDescription");
-          $getDescription.html(childSnapshot.val().calEvent.description);
+          $getDescription.html($eventDescriptionItem);
+          $getDescription.append($collapseEventDescriptionItem);
           $getRow.append($getDescription);
 
           /* ********************* Create View Location Buttons ************************** */
@@ -204,7 +223,7 @@ $(document).ready(function () {
           $mapButton.attr("type", "button");
           $mapButton.addClass("viewLocation");
           $mapButton.addClass("btn btn-success");
-          $mapButton.attr("id", "topics_button_row" + i);
+          $mapButton.attr("id", "topics_button_row" + j);
           $mapButton.attr("value", $listLN);
           $mapButton.html("<p>View Location</p>");
           $getMapButton.append($mapButton);
@@ -258,46 +277,6 @@ $(document).ready(function () {
               }
             }
 
-            /*function initMap() {
-               var torontoEvent = new google.maps.LatLng(place.Lat, place.Lng);
-             
-               infowindow = new google.maps.InfoWindow();
-             
-               map = new google.maps.Map(document.getElementById("map"), {
-                 center: torontoEvent,
-                 zoom: 15
-               });
-             
-               console.log("locationName (map request 3 $listLN) = " + $listLN);
-               var request = {
-                 query: $listLN,
-                 fields: ["name", "formatted_address", "geometry"]
-               };
-             
-               service = new google.maps.places.PlacesService(map);
-             
-               service.findPlaceFromQuery(request, function(results, status) {
-                 if (status === google.maps.places.PlacesServiceStatus.OK) {
-                   for (var i = 0; i < results.length; i++) {
-                     createMarker(results[i]);
-                   }
-             
-                   map.setCenter(results[0].geometry.location);
-                 }
-               });
-             } 
-             function createMarker(place) {
-               var marker = new google.maps.Marker({
-                 map: map,
-                 title: place.name,
-                 position: place.geometry.location
-               });
-             
-               google.maps.event.addListener(marker, "click", function() {
-                 infowindow.setContent(place.name + " - " + place.formatted_address);
-                 infowindow.open(map, this);
-               });
-             }*/
           });
 
         }
@@ -306,102 +285,3 @@ $(document).ready(function () {
   }
 
 });
-
-
-
-
-
-//});
-//************************************************** Tests ********************************************************* */
-
-/* Test1: Add each element to the table */
-//for (var j = 0; j < childSnapshot.val().calEvent.eventName.length; j++) {
-//var $getRow = $("<tr>");
-//$getRow.addClass("getRow");
-//$(".eventsDataArea").append($getRow);
-//var $getEventName = $("<th>");
-//$getEventName.addClass("getEventName");
-//$getRow.attr("scope", "row");
-//$('.getEventName').html(childSnapshot.val().calEvent.eventName);
-//}
-
-/* Test 2: Add each element to the table */
-/*let y = 0
-                    $("#eventsDataArea").empty();
-
-                    //var database = firebase.database();
-                    //database.ref().once('value', function (snapshot) {
-                    //if (snapshot.exists()) {
-                    var content = '';
-                    forEach(function (data) {
-                        y++
-                        var val = data.val();
-                        content += '<tr>';
-                        content += '<th>' + 'scope="row"' + childSnapshot.val().calEvent.eventName + '</th>';
-                        content += '<td>' + childSnapshot.val().calEvent.dates[i].startDateTime + '</td>';
-                        content += '<td>' + childSnapshot.val().calEvent.description + '</td>';
-                        content += '<td>' + '</td>';
-                        content += '</tr>';
-                    });
-                    $('#eventsDataArea').append(content);*/
-//}
-//});
-
-//}
-
-
-
-
-        //locationArray.push(childSnapshot.val().calEvent.locations[0].locationName);
-        //listLN = childSnapshot.val().calEvent.locations[0].locationName;
-
-
-
-  //localStorage.setItem("listLN", "listLN");
-  //localStorage.setItem("listLN", childSnapshot.val().calEvent.locations[0].locationName);
-            //listLN = childSnapshot.val().calEvent.locations[0].locationName;
-            //localStorage.setItem("listLN", "listLN");
-            //listLN = localStorage.getItem("listLN");
-            //$listLN = childSnapshot.val().calEvent.locations[0].locationName;
-            //var $listLN = document.getElementByClassName("getMapButton"); 
-            //$listLN = locationArray[0];
-
-
-
-
-
-        //database.ref().set({
-        //listLN: childSnapshot.val().calEvent.locations[0].locationName
-        //});
-
-// Store
-//localStorage.setItem("listLN", "listLN");
-//localStorage.setItem("listLN", childSnapshot.val().calEvent.locations[0].locationName);
-// Retrieve
-//listLN = localStorage.getItem("listLN");
-
-        //console.log(
-        //  "eventArray Length = " + childSnapshot.val().calEvent.eventName.length);
-
-
-        //<button id="myBtn" name="myname" value=childSnapshot.val().calEvent.locations[0].locationName onclick="listLN=(this.value)">View Location</button>
-       // var $getMapButton =  $(" <td class='getMapButton'> <input type='submit' $listLN=" + childSnapshot.val().calEvent.locations[0].locationName + " class='btn btn-success btn-topics-input' value='View Location'/></td>");
-
-         //eventArray.push(childSnapshot.val().calEvent.eventName);
-
-           //var eventDatePicker = "2019-07-03";
-  //var eventDatePicker = $('.getDate').val();
-
-      //childSnapshot.forEach(function (element) {
-
-
-//document.getElementById('btn').addEventListener('click', function(){
-//  pay();
-//  cls();
-//});
-
-  //$(".btn-topics-input").on("click", function() {
-  // Store
- //
-
-//  window.open("maps.html", "_blank");
