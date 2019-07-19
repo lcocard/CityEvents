@@ -5,7 +5,7 @@
 html,
 body {
   height: 100%;
-  margin: 5px;
+  margin: 0.625rem;
   padding: 0;
 }
 
@@ -15,9 +15,9 @@ body {
 }
 
 /* ***************************** Partial Collapsed Text ********************************************* */
-/*.getDescription {
-  width: 500px;
-}*/
+.getDescription {
+  width: 31.25rem;
+}
 
 .getDescription a.collapsed::after {
   content: "+ Show More";
