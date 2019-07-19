@@ -5,7 +5,7 @@
 html,
 body {
   height: 100%;
-  margin: 0;
+  margin: 5px;
   padding: 0;
 }
 
@@ -31,7 +31,7 @@ body {
   display: block;
   /* height = lineheight * no of lines to display */
   height: 3rem;
-  overflow: hidden;
+  text-overflow: clip;
 }
 
 .getDescription #collapseEventDescription.collapsing {
