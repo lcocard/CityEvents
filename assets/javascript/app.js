@@ -106,32 +106,42 @@ $(document).ready(function () {
     var eventDatePicker = document.querySelector("#datePicker").value;
     console.log("eventDatePicker = " + eventDatePicker);
     var eventDatePickerFORM = "YYYY-MM-DD";
-    var convertedEventDatePicker = moment(eventDatePicker, eventDatePickerFORM);
+    var convertedEventDatePicker = moment.utc(eventDatePicker, eventDatePickerFORM);
     console.log(
       "convertedEventDatePicker = " + convertedEventDatePicker.format()
     );
     var eventFromDate = convertedEventDatePicker.format();
-    var eventNextDay = moment(eventFromDate).add(1, "days");
+    var eventNextDay = moment.utc(eventFromDate).add(1, "days");
+
+
 
     console.log("eventFromDate = " + eventFromDate);
     console.log("eventNextDay = " + eventNextDay.format());
+
 
     var ref = database.ref("calEvent");
 
     database.ref().on("child_added", function (childSnapshot) {
       for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
+
+        var eventStartDate2 = childSnapshot.val().calEvent.dates[i].startDateTime;
+        var eventStartDate2FORM = "";
+        var adjustedEventStartDate = moment(eventStartDate2, eventStartDate2FORM).format();
+
+        var eventEndDate2 = childSnapshot.val().calEvent.dates[i].endDateTime;
+        var eventEndDate2FORM = "";
+        var adjustedEventEndDate = moment(eventEndDate2, eventEndDate2FORM).format();
+        //console.log("adjustedEventEndDate = " + adjustedEventEndDate.format());
+
         if (
-          eventFromDate <= childSnapshot.val().calEvent.dates[i].startDateTime &&
-          childSnapshot.val().calEvent.dates[i].startDateTime <=
-          eventNextDay.format()
+          (childSnapshot.val().calEvent.dates[i].startDateTime <= eventFromDate) && (eventFromDate <= childSnapshot.val().calEvent.dates[i].endDateTime)
         ) {
           //console.log(childSnapshot.val().calEvent.dates)
           console.log(
             " startDateTime = " +
             childSnapshot.val().calEvent.dates[i].startDateTime +
             " EndDateTime = " +
-            childSnapshot.val().calEvent.dates[i].endDateTime +
-            " Description = " +
+            childSnapshot.val().calEvent.dates[i].endDateTime + " Description = " +
             childSnapshot.val().calEvent.description +
             " Location = " + childSnapshot.val().calEvent.locations[0].locationName +
             " EventName = " +
@@ -162,8 +172,18 @@ $(document).ready(function () {
 
           var $getDate = $("<td>");
           $getDate.addClass("getDate");
-          $getDate.html(convertedDate.format("MMM Do YY"));
+          $getDate.html(convertedDate.format("YYYY-MM-DDTHH:mm:ss"));
           $getRow.append($getDate);
+
+          var randomDate2 = childSnapshot.val().calEvent.dates[i].endDateTime;
+          var randomFormat2 = "";
+          var convertedDate2 = moment(randomDate2, randomFormat2);
+
+
+          var $getDate2 = $("<td>");
+          $getDate2.addClass("getDate2");
+          $getDate2.html(convertedDate2.format("YYYY-MM-DDTHH:mm:ss"));
+          $getRow.append($getDate2);
 
           var $getDescription = $("<td>");
           $getDescription.addClass("getDescription");

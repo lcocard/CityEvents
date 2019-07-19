@@ -29,7 +29,7 @@ var $listLN;
 //var listLN = localStorage.getItem("listLN");
 //console.log("locationName (listLN) = " + listLN);
 
-listLN = "Nathan Phillips Square";
+//listLN = "Nathan Phillips Square";
 
 function initMap() {
   var torontoEvent = new google.maps.LatLng(43.7184034, -79.5184845);
