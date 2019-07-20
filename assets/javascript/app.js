@@ -1,3 +1,6 @@
+/* *******************  City Events Project 1 - app.JS ******************************************************************* */
+
+/* ****************** Firebase ************************** */
 var config = {
   apiKey: "AIzaSyAWutX-VXDOCMn5DULQaMMZpExXF-HU2LQ",
   authDomain: "project1-7542e.firebaseapp.com",
@@ -12,7 +15,13 @@ firebase.initializeApp(config);
 
 var database = firebase.database();
 
+/* ***************************************** Init Google Map 1 *********************************************************** */
+
 $listLN = "Nathan Phillips Square";
+
+$(document).ready(function () {
+  $(".jumbotron").focus();
+});
 
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
@@ -26,6 +35,8 @@ var markers = [];
 placeLat = 0;
 placeLng = 0;
 j = 0;
+
+
 //var listLN = "Nathan Phillips Square";
 //placeLat=43.7184034
 //placeLng=-79.5184845
@@ -58,6 +69,7 @@ function initMap() {
       map.setCenter(results[0].geometry.location);
     }
   });
+
 }
 
 function createMarker(place) {
@@ -86,6 +98,8 @@ function setMapOnAll(map) {
     markers[i].setMap(map);
   }
 }
+
+/* ************************************** Search Firebase Data Events by Date ****************************************** */
 
 $(document).ready(function () {
   let now = new Date();
@@ -149,7 +163,7 @@ $(document).ready(function () {
             childSnapshot.val().calEvent.eventName
           );
 
-          /* ********************* Create table columns ************************** */
+          /* ***************************************** Create table columns ******************************************* */
 
           var $getRow = $("<tr>");
           $getRow.addClass("getRow");
@@ -191,11 +205,11 @@ $(document).ready(function () {
           $getDate2.html(convertedDate2.format("MMM Do HH:mm"));
           $getRow.append($getDate2);
 
-          /* *********Index for creating unique IDs******* */
+          /* ************************************Index for creating unique IDs***************************************** */
 
           j++
 
-          /* *************** Create colapsable text description boxes ************************* */
+          /* ****************************** Create colapsable text description boxes ************************************** */
 
           var $collapseEventDescriptionItem = $("<a>");
           $collapseEventDescriptionItem.attr("role", "button");
@@ -220,7 +234,7 @@ $(document).ready(function () {
           $getDescription.append($collapseEventDescriptionItem);
           $getRow.append($getDescription);
 
-          /* ********************* Create View Location Buttons ************************** */
+          /* *************************************** Create View Location Buttons ******************************************** */
 
           $listLN = childSnapshot.val().calEvent.locations[0].locationName;
           console.log("locationName (buttons creation $listLN) = " + $listLN);
@@ -246,9 +260,10 @@ $(document).ready(function () {
 
           $("#eventsDataArea").append($getRow);
 
-          /* ************************** The User Clicks a Button to Display the Event Map ************************** */
+          /* ************************** The User Clicks a Button to Display the Event Map ********************************** */
 
           $(document).on("click", ".viewLocation", function () {
+
             $listLN = $(this).val();
 
             var placeLat = childSnapshot.val().calEvent.locations[0].coords.lat;
@@ -260,6 +275,8 @@ $(document).ready(function () {
               setMapOnAll(map);
             }
 
+            /* ***************************************** Init Google Map 2 ************************************************** */
+
             initMap();
 
             var markers = [];
@@ -268,6 +285,7 @@ $(document).ready(function () {
                 map: map,
                 position: place.geometry.location
               });
+
               markers.push(marker);
               google.maps.event.addListener(marker, "click", function () {
                 infowindow.setContent(place.name + " - " + place.formatted_address);

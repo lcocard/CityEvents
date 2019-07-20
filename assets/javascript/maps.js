@@ -1,18 +1,18 @@
-/* ************** City Events - Maps.JS *********** */
+/* ****************************** City Events - Maps.JS ******************** */
 
 var config = {
-    apiKey: "AIzaSyAWutX-VXDOCMn5DULQaMMZpExXF-HU2LQ",
-    authDomain: "project1-7542e.firebaseapp.com",
-    databaseURL: "https://project1-7542e.firebaseio.com",
-    projectId: "project1-7542e",
-    storageBucket: "project1-7542e.appspot.com",
-    messagingSenderId: "800720391067",
-    appId: "1:800720391067:web:41780486e1ebc136"
-  };
-  
-  firebase.initializeApp(config);
-  
-  var database = firebase.database();
+  apiKey: "AIzaSyAWutX-VXDOCMn5DULQaMMZpExXF-HU2LQ",
+  authDomain: "project1-7542e.firebaseapp.com",
+  databaseURL: "https://project1-7542e.firebaseio.com",
+  projectId: "project1-7542e",
+  storageBucket: "project1-7542e.appspot.com",
+  messagingSenderId: "800720391067",
+  appId: "1:800720391067:web:41780486e1ebc136"
+};
+
+firebase.initializeApp(config);
+
+var database = firebase.database();
 
 
 // This example requires the Places library. Include the libraries=places
@@ -48,7 +48,7 @@ function initMap() {
 
   service = new google.maps.places.PlacesService(map);
 
-  service.findPlaceFromQuery(request, function(results, status) {
+  service.findPlaceFromQuery(request, function (results, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         createMarker(results[i]);
@@ -65,7 +65,7 @@ function createMarker(place) {
     position: place.geometry.location
   });
 
-  google.maps.event.addListener(marker, "click", function() {
+  google.maps.event.addListener(marker, "click", function () {
     infowindow.setContent(place.name + " - " + place.formatted_address);
     infowindow.open(map, this);
   });
