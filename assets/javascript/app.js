@@ -186,7 +186,11 @@ $(document).ready(function () {
           $getDate2.html(convertedDate2.format("YYYY-MM-DDTHH:mm:ss"));
           $getRow.append($getDate2);
 
+          /* *********Index for creating unique IDs******* */
+
           j++
+
+          /* *************** Create colapsable text description boxes ************************* */
 
           var $collapseEventDescriptionItem = $("<a>");
           $collapseEventDescriptionItem.attr("role", "button");
@@ -205,6 +209,7 @@ $(document).ready(function () {
 
           var $getDescription = $("<td>");
           $getDescription.addClass("getDescription");
+          $getDescription.attr("style", "width: 40%");
           $getDescription.html($eventDescriptionItem);
           $getDescription.append($collapseEventDescriptionItem);
           $getRow.append($getDescription);
@@ -240,8 +245,6 @@ $(document).ready(function () {
             var placeLng = childSnapshot.val().calEvent.locations[0].coords.lng;
 
             console.log("locationName (map request 2 $listLN) = " + $listLN);
-            //console.log("placeLat - placeLng (map request 2)=  " + placeLat + "  -  " + placeLng);
-            //console.log("placeLat - placeLng (map request 3)=  " + place.geometry.location.lat()+ "  -  " + place.geometry.location.lng();
 
             function showMarkers() {
               setMapOnAll(map);

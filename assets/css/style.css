@@ -15,8 +15,16 @@ body {
 }
 
 /* ***************************** Partial Collapsed Text ********************************************* */
+.w-40 {
+  width: 40%;
+}
+
 .getDescription {
-  width: 50rem;
+  width: 40%;
+}
+
+table {
+  table-layout: auto; /* will switch the table-layout algorythm */
 }
 
 .getDescription a.collapsed::after {
@@ -31,7 +39,7 @@ body {
   display: block;
   /* height = lineheight * no of lines to display */
   height: 3rem;
-  text-overflow: clip;
+  text-overflow: hidden;
 }
 
 .getDescription #collapseEventDescription.collapsing {
