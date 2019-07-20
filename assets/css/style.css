@@ -13,6 +13,10 @@ body {
   font-size: calc(10px + 0.6vw);
 }
 
+button {
+  padding: 0;
+}
+
 /* ***************************** Partial Collapsed Text ********************************************* */
 .w-40 {
   width: 40%;
