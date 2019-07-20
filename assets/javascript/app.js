@@ -153,16 +153,19 @@ $(document).ready(function () {
 
           var $getRow = $("<tr>");
           $getRow.addClass("getRow");
+          $getRow.addClass("d-flex");
 
 
           var $getEventName = $("<th>");
           $getEventName.addClass("getEventName");
           $getEventName.attr("scope", "row");
+          $getEventName.addClass("col-2");
           $getEventName.html(childSnapshot.val().calEvent.eventName);
           $getRow.append($getEventName);
 
           var $getEventLocation = $("<th>");
           $getEventLocation.addClass("getEventLocation");
+          $getEventLocation.addClass("col-2");
           $getEventLocation.html(childSnapshot.val().calEvent.locations[0].locationName);
           $getRow.append($getEventLocation);
 
@@ -173,7 +176,8 @@ $(document).ready(function () {
 
           var $getDate = $("<td>");
           $getDate.addClass("getDate");
-          $getDate.html(convertedDate.format("YYYY-MM-DDTHH:mm:ss"));
+          $getDate.addClass("col-1");
+          $getDate.html(convertedDate.format("MMM Do HH:mm"));
           $getRow.append($getDate);
 
           var randomDate2 = childSnapshot.val().calEvent.dates[i].endDateTime;
@@ -183,7 +187,8 @@ $(document).ready(function () {
 
           var $getDate2 = $("<td>");
           $getDate2.addClass("getDate2");
-          $getDate2.html(convertedDate2.format("YYYY-MM-DDTHH:mm:ss"));
+          $getDate2.addClass("col-1");
+          $getDate2.html(convertedDate2.format("MMM Do HH:mm"));
           $getRow.append($getDate2);
 
           /* *********Index for creating unique IDs******* */
@@ -209,6 +214,7 @@ $(document).ready(function () {
 
           var $getDescription = $("<td>");
           $getDescription.addClass("getDescription");
+          $getDescription.addClass("col-5");
           $getDescription.attr("style", "width: 40%");
           $getDescription.html($eventDescriptionItem);
           $getDescription.append($collapseEventDescriptionItem);
@@ -224,6 +230,7 @@ $(document).ready(function () {
 
           var $getMapButton = $("<td>");
           $getMapButton.addClass("getMapButton");
+          $getMapButton.addClass("col-1");
           var $mapButton = $("<button>");
           $mapButton.attr("type", "button");
           $mapButton.addClass("viewLocation");
