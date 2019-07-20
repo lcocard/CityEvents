@@ -10,8 +10,7 @@ body {
 }
 
 #eventsDataArea {
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: calc(10px + 0.6vw);
 }
 
 /* ***************************** Partial Collapsed Text ********************************************* */
