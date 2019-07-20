@@ -214,7 +214,7 @@ $(document).ready(function () {
 
           var $getDescription = $("<td>");
           $getDescription.addClass("getDescription");
-          $getDescription.addClass("col-5");
+          $getDescription.addClass("col-4");
           $getDescription.attr("style", "width: 40%");
           $getDescription.html($eventDescriptionItem);
           $getDescription.append($collapseEventDescriptionItem);
@@ -230,7 +230,7 @@ $(document).ready(function () {
 
           var $getMapButton = $("<td>");
           $getMapButton.addClass("getMapButton");
-          $getMapButton.addClass("col-1");
+          $getMapButton.addClass("col-2");
           var $mapButton = $("<button>");
           $mapButton.attr("type", "button");
           $mapButton.addClass("viewLocation");
