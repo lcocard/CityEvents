@@ -19,12 +19,6 @@ var database = firebase.database();
 
 $listLN = "Nathan Phillips Square";
 
-$(document).ready(function () {
-  $("#datePicker").focus();
-});
-
-
-
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
@@ -36,8 +30,8 @@ var marker;
 var markers = [];
 placeLat = 0;
 placeLng = 0;
+var $linkEventName = "";
 j = 0;
-
 
 //var listLN = "Nathan Phillips Square";
 //placeLat=43.7184034
@@ -104,6 +98,10 @@ function setMapOnAll(map) {
 /* ************************************** Search Firebase Data Events by Date ****************************************** */
 
 $(document).ready(function () {
+  $('html, body').animate({
+    scrollTop: $('#title').offset().top
+  }, 'slow');
+
   let now = new Date();
 
   let day = ("0" + now.getDate()).slice(-2);
@@ -177,7 +175,7 @@ $(document).ready(function () {
             childSnapshot.val().calEvent.description +
             " Location = " + childSnapshot.val().calEvent.locations[0].locationName +
             " EventName = " +
-            childSnapshot.val().calEvent.eventName
+            childSnapshot.val().calEvent.eventName + " Web Address: " + childSnapshot.val().calEvent.eventWebsite
           );
 
           /* ***************************************** Create table columns ******************************************* */
@@ -186,8 +184,11 @@ $(document).ready(function () {
           $getRow.addClass("getRow");
           $getRow.addClass("d-flex");
 
-          var $linkEventName = '<a href="' + childSnapshot.val().calEvent.eventWebsite + '" target="_blank">' + childSnapshot.val().calEvent.eventName + '<a>';
-
+          if (typeof childSnapshot.val().calEvent.dates[i].eventWebsite !== ("https://lcocard.github.io/CityEvents/undefined" || "file:///Users/lcocard/Documents/Bootcamp/Class2_Courses/week11/Assignment/CityEvents/undefined")) {
+            $linkEventName = '<a href="' + childSnapshot.val().calEvent.eventWebsite + '" target="_blank">' + childSnapshot.val().calEvent.eventName + '<a>';
+          } else {
+            $linkEventName = '<a href="#">' + childSnapshot.val().calEvent.eventName + '<a>';
+          }
           var $getEventName = $("<th>");
           $getEventName.addClass("getEventName");
           $getEventName.attr("scope", "row");
@@ -348,10 +349,10 @@ $(document).ready(function () {
             }
 
           });
-
         }
       }
     });
   }
 
 });
+
