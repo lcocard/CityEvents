@@ -186,12 +186,14 @@ $(document).ready(function () {
           $getRow.addClass("getRow");
           $getRow.addClass("d-flex");
 
+          var $linkEventName = '<a href="' + childSnapshot.val().calEvent.eventWebsite + '" target="_blank">' + childSnapshot.val().calEvent.eventName + '<a>';
 
           var $getEventName = $("<th>");
           $getEventName.addClass("getEventName");
           $getEventName.attr("scope", "row");
           $getEventName.addClass("col-2");
-          $getEventName.html(childSnapshot.val().calEvent.eventName);
+          //$getEventName.html(childSnapshot.val().calEvent.eventName);
+          $getEventName.html($linkEventName);
           $getRow.append($getEventName);
 
           var $getEventLocation = $("<th>");
@@ -240,7 +242,23 @@ $(document).ready(function () {
           $collapseEventDescriptionItem.attr("aria-expanded", "false");
           $collapseEventDescriptionItem.attr("aria-controls", "collapseEventDescription" + j);
 
-          var $eventDescription = childSnapshot.val().calEvent.description;
+          var getReservationRequired = childSnapshot.val().calEvent.reservationRequired;
+          if (typeof childSnapshot.val().calEvent.reservationRequired === "undefined") {
+            getReservationRequired = "Not Required";
+          }
+
+          var getEventEmail = childSnapshot.val().calEvent.eventEmail;
+          if (typeof childSnapshot.val().calEvent.eventEmail === "undefined") {
+            getEventEmail = "Email not provided";
+          }
+
+          var getEventPhone = childSnapshot.val().calEvent.eventPhone;
+          if (typeof childSnapshot.val().calEvent.eventPhone === "undefined") {
+            getEventPhone = "Phone # not provided";
+          }
+
+          var $eventDescription = childSnapshot.val().calEvent.description + " *** Free Event: " + childSnapshot.val().calEvent.freeEvent + " *** Reservation Required: " + getReservationRequired + " *** Event e-mail: " + getEventEmail + " *** Event Phone: " + getEventPhone;
+
           var $eventDescriptionItem = $("<p>");
           $eventDescriptionItem.addClass("collapse");
           $eventDescriptionItem.attr("id", "collapseEventDescription" + j);
