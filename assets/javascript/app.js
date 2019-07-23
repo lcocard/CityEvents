@@ -20,8 +20,10 @@ var database = firebase.database();
 $listLN = "Nathan Phillips Square";
 
 $(document).ready(function () {
-  $(".jumbotron").focus();
+  $("#datePicker").focus();
 });
+
+
 
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
@@ -121,17 +123,16 @@ $(document).ready(function () {
     var eventDatePicker = document.querySelector("#datePicker").value;
     console.log("eventDatePicker = " + eventDatePicker);
     var eventDatePickerFORM = "YYYY-MM-DD";
-    var convertedEventDatePicker = moment.utc(eventDatePicker, eventDatePickerFORM);
-    console.log(
-      "convertedEventDatePicker = " + convertedEventDatePicker.format()
-    );
-    var eventFromDate = convertedEventDatePicker.format();
-    var eventNextDay = moment.utc(eventFromDate).add(1, "days");
+    //var convertedEventDatePicker = moment.utc(eventDatePicker, eventDatePickerFORM);
+    var convertedEventDatePicker = eventDatePicker + "T00:00:00.000Z";
+    console.log("convertedEventDatePicker = " + convertedEventDatePicker);
+    //var eventFromDate = convertedEventDatePicker.format();
+    //var eventNextDay = moment.utc(eventFromDate).add(1, "days");
 
 
 
-    console.log("eventFromDate = " + eventFromDate);
-    console.log("eventNextDay = " + eventNextDay.format());
+    //console.log("eventFromDate = " + eventFromDate.format());
+    //console.log("eventNextDay = " + eventNextDay.format());
 
 
     var ref = database.ref("calEvent");
@@ -139,18 +140,34 @@ $(document).ready(function () {
     database.ref().on("child_added", function (childSnapshot) {
       for (var i = 0; i < childSnapshot.val().calEvent.dates.length; i++) {
 
-        var eventStartDate2 = childSnapshot.val().calEvent.dates[i].startDateTime;
-        var eventStartDate2FORM = "";
-        var adjustedEventStartDate = moment(eventStartDate2, eventStartDate2FORM).format();
+        var eventStartDate2 = moment(childSnapshot.val().calEvent.dates[i].startDateTime);
+        var splitEventStartDate2 = (eventStartDate2.format()).split("T");
+        var adjustedEventStartDate2 = splitEventStartDate2[0] + "T00:00:00.000Z";
 
-        var eventEndDate2 = childSnapshot.val().calEvent.dates[i].endDateTime;
-        var eventEndDate2FORM = "";
-        var adjustedEventEndDate = moment(eventEndDate2, eventEndDate2FORM).format();
+        //var eventStartDate2FORM = "";
+        //var adjustedEventStartDate = moment(eventStartDate2, eventStartDate2FORM).format("YYYY-MM-DD");
+
+
+        var eventEndDate2 = moment(childSnapshot.val().calEvent.dates[i].endDateTime);
+        if (typeof childSnapshot.val().calEvent.dates[i].endDateTime === "undefined") {
+          eventEndDate2 = eventStartDate2;
+        }
+        var splitEventEndDate2 = (eventEndDate2.format()).split("T");
+        var adjustedEventEndDate2 = splitEventEndDate2[0] + "T00:00:00.000Z";
+
+
+
+        //var eventEndDate2FORM = "";
+        //var adjustedEventEndDate = moment(eventEndDate2, eventEndDate2FORM).format();
+
+        //console.log("adjustedEventEndDate = " + adjustedEventStartDate.format());
         //console.log("adjustedEventEndDate = " + adjustedEventEndDate.format());
 
         if (
-          (childSnapshot.val().calEvent.dates[i].startDateTime <= eventFromDate) && (eventFromDate <= childSnapshot.val().calEvent.dates[i].endDateTime)
+          (adjustedEventStartDate2 <= convertedEventDatePicker) && (convertedEventDatePicker <= adjustedEventEndDate2)
         ) {
+          console.log("adjustedEventStartDate2 = " + adjustedEventStartDate2)
+          console.log("adjustedEventEndDate2 = " + adjustedEventEndDate2)
           //console.log(childSnapshot.val().calEvent.dates)
           console.log(
             " startDateTime = " +
@@ -183,26 +200,30 @@ $(document).ready(function () {
           $getEventLocation.html(childSnapshot.val().calEvent.locations[0].locationName);
           $getRow.append($getEventLocation);
 
-          var randomDate = childSnapshot.val().calEvent.dates[i].startDateTime;
-          var randomFormat = "";
-          var convertedDate = moment(randomDate, randomFormat);
+          //var randomDate = eventStartDate2;
+          //var randomFormat = "";
+          //var convertedDate = moment(randomDate, randomFormat);
 
 
           var $getDate = $("<td>");
           $getDate.addClass("getDate");
           $getDate.addClass("col-1");
-          $getDate.html(convertedDate.format("MMM Do HH:mm"));
+          $getDate.html(eventStartDate2.format("MMM Do HH:mm"));
           $getRow.append($getDate);
 
-          var randomDate2 = childSnapshot.val().calEvent.dates[i].endDateTime;
-          var randomFormat2 = "";
-          var convertedDate2 = moment(randomDate2, randomFormat2);
+          //var randomDate2 = eventEndDate2;
+          //var randomFormat2 = "";
+          //var convertedDate2 = moment(randomDate2, randomFormat2);
 
 
           var $getDate2 = $("<td>");
           $getDate2.addClass("getDate2");
           $getDate2.addClass("col-1");
-          $getDate2.html(convertedDate2.format("MMM Do HH:mm"));
+          if (typeof childSnapshot.val().calEvent.dates[i].endDateTime === "undefined") {
+            $getDate2.html(eventStartDate2.format("MMM Do YYYY"));
+          } else {
+            $getDate2.html(eventEndDate2.format("MMM Do HH:mm"));
+          }
           $getRow.append($getDate2);
 
           /* ************************************Index for creating unique IDs***************************************** */
