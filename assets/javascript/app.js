@@ -257,7 +257,7 @@ $(document).ready(function () {
             getEventPhone = "Phone # not provided";
           }
 
-          var $eventDescription = childSnapshot.val().calEvent.description + " *** Free Event: " + childSnapshot.val().calEvent.freeEvent + " *** Reservation Required: " + getReservationRequired + " *** Event e-mail: " + getEventEmail + " *** Event Phone: " + getEventPhone;
+          var $eventDescription = childSnapshot.val().calEvent.description + " *** Free Event: " + childSnapshot.val().calEvent.freeEvent + " *** Reservation: " + getReservationRequired + " *** Email: " + getEventEmail + " *** Tel: " + getEventPhone;
 
           var $eventDescriptionItem = $("<p>");
           $eventDescriptionItem.addClass("collapse");

@@ -33,11 +33,11 @@ table {
 }
 
 .getDescription a.collapsed::after {
-  content: " + Show More ";
+  content: " + Show ";
 }
 
 .getDescription a:not(.collapsed)::after {
-  content: " - Show Less ";
+  content: " - Hide";
 }
 
 .getDescription #collapseEventDescription.collapse:not(.show) {
