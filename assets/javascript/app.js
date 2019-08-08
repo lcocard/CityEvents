@@ -1,106 +1,120 @@
 /* *******************  City Events Project 1 - app.JS ******************************************************************* */
 
 /* ****************** Firebase ************************** */
-var config = {
-  apiKey: "AIzaSyAWutX-VXDOCMn5DULQaMMZpExXF-HU2LQ",
-  authDomain: "project1-7542e.firebaseapp.com",
-  databaseURL: "https://project1-7542e.firebaseio.com",
-  projectId: "project1-7542e",
-  storageBucket: "project1-7542e.appspot.com",
-  messagingSenderId: "800720391067",
-  appId: "1:800720391067:web:41780486e1ebc136"
-};
+$(document).ready(function () {
 
-firebase.initializeApp(config);
+  require('dotenv').config();
+  var api_key = process.env.FIREBASE_API_KEY;
+  var appId = process.env.appId;
+  var messagingSenderId = process.env.messagingSenderId;
+  var projectId = process.env.projectId;
 
-var database = firebase.database();
-
-/* ***************************************** Init Google Map 1 *********************************************************** */
-
-$listLN = "Nathan Phillips Square";
-
-// This example requires the Places library. Include the libraries=places
-// parameter when you first load the API. For example:
-// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-var map;
-var service;
-var infowindow;
-var marker;
-var markers = [];
-placeLat = 0;
-placeLng = 0;
-var $linkEventName = "";
-j = 0;
-
-//var listLN = "Nathan Phillips Square";
-//placeLat=43.7184034
-//placeLng=-79.5184845
-//listLN = localStorage.getItem("listLN");
-
-function initMap() {
-  var torontoEvent = new google.maps.LatLng(placeLat, placeLng);
-
-  infowindow = new google.maps.InfoWindow();
-
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: torontoEvent,
-    zoom: 15
-  });
-
-  console.log("locationName (map request 1 $listLN) = " + $listLN);
-  var request = {
-    query: $listLN,
-    fields: ["name", "formatted_address", "geometry"]
+  var dbconfig = {
+    apiKey: "api_key",
+    authDomain: "project1-7542e.firebaseapp.com",
+    databaseURL: "https://project1-7542e.firebaseio.com",
+    projectId: "projectId",
+    storageBucket: "project1-7542e.appspot.com",
+    messagingSenderId: "messagingSenderId",
+    appId: "appId"
   };
 
-  service = new google.maps.places.PlacesService(map);
+  firebase.initializeApp(dbconfig);
 
-  service.findPlaceFromQuery(request, function (results, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      for (var i = 0; i < results.length; i++) {
-        createMarker(results[i]);
+  var database = firebase.database();
+
+
+  /* ***************************************** Init Google Map 1 *********************************************************** */
+
+  $listLN = "Nathan Phillips Square";
+
+  // This example requires the Places library. Include the libraries=places
+  // parameter when you first load the API. For example:
+  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+  var map;
+  var service;
+  var infowindow;
+  var marker;
+  var markers = [];
+  placeLat = 0;
+  placeLng = 0;
+  var $linkEventName = "";
+  j = 0;
+
+  //var listLN = "Nathan Phillips Square";
+  //placeLat = 43.7184034
+  //placeLng = -79.5184845
+  //listLN = localStorage.getItem("listLN");
+
+  window.initMap = function () {
+    var torontoEvent = new google.maps.LatLng(placeLat, placeLng);
+
+    infowindow = new google.maps.InfoWindow();
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: torontoEvent,
+      zoom: 15
+    });
+
+    console.log("locationName (map request 1 $listLN) = " + $listLN);
+    var request = {
+      query: $listLN,
+      fields: ["name", "formatted_address", "geometry"]
+    };
+
+    service = new google.maps.places.PlacesService(map);
+
+    service.findPlaceFromQuery(request, function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
+
+        map.setCenter(results[0].geometry.location);
       }
+    });
 
-      map.setCenter(results[0].geometry.location);
-    }
-  });
-
-}
-
-function createMarker(place) {
-  var marker = new google.maps.Marker({
-    map: map,
-    position: place.geometry.location
-  });
-
-  google.maps.event.addListener(marker, "click", function () {
-    infowindow.setContent(place.name + " - " + place.formatted_address);
-    infowindow.open(map, this);
-  });
-
-}
-
-function addMarker(location) {
-  var marker = new google.maps.Marker({
-    position: location,
-    map: map
-  });
-  markers.push(marker);
-}
-
-function setMapOnAll(map) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
   }
-}
 
-/* ************************************** Search Firebase Data Events by Date ****************************************** */
+  function createMarker(place) {
+    var marker = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location
+    });
 
-$(document).ready(function () {
+    google.maps.event.addListener(marker, "click", function () {
+      infowindow.setContent(place.name + " - " + place.formatted_address);
+      infowindow.open(map, this);
+    });
+
+  }
+
+  function addMarker(location) {
+    var marker = new google.maps.Marker({
+      position: location,
+      map: map
+    });
+    markers.push(marker);
+  }
+
+  function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  }
+
+
+
+  /* ************************************** Search Firebase Data Events by Date ****************************************** */
   $('html, body').animate({
     scrollTop: $('#title').offset().top
   }, 'slow');
+
+  $('html,body').stop(true, false).animate({
+    scrollTop: $('#title').offset().top
+  }, 'slow');
+
 
   let now = new Date();
 
@@ -348,11 +362,19 @@ $(document).ready(function () {
               }
             }
 
+            $('html, body').animate({
+              scrollTop: $('#map').offset().top
+            }, 'slow');
+
+            $('html,body').stop(true, false).animate({
+              scrollTop: $('#map').offset().top
+            }, 'slow');
+
           });
+
         }
       }
     });
   }
-
 });
 
